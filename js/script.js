@@ -3,8 +3,12 @@
 const overview = document.querySelector (".overview");
 //Guthub username
 const username = "waendesignco";
-//Select the repos list
+//2.The repos list
 const repoList = document.querySelector (".repo-list");
+//3. Section of class of "repos" where all the repo info appears
+const allReposContainer = document.querySelector (".repos");
+//4. Section with a classs of "repo-data" where the individual repo data will appear
+const repoData = document.querySelector (".repo-data");
 
 //Fetch API jSON data
 const gitUserInfo = async function() {
@@ -51,3 +55,34 @@ const displayRepos = function (repos) {
         repoList.append(repoItem);
     }
 };
+
+//Add a click event
+repoList.addEventListener ("click", function (e) {
+    if (e.target.matches("h3")) {
+     const repoName = e.target.innerText;
+     getRepoInfo(repoName);
+    }
+});
+
+//Create a function to get specific repo info
+const getRepoInfo = async function (repoName) {
+    const response = await fetch (`https://api.github.com/repos/${username}/${repoName}`);
+    const repoInfo = await response.json();
+    console.log(repoInfo);
+
+    //Fetch languages
+    const fetchLanguages = await fetch(repoInfo.languages_url);
+    const languageData = await fetchLanguages.json();
+    console.log(languageData);
+    //Make a lis of languages
+    const languages = [];
+    for (const language of languageData) {
+        languages.push(language);
+    }
+
+        
+};
+
+
+
+
