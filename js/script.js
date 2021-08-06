@@ -50,7 +50,7 @@ const gitRepos = async function() {
 const displayRepos = function (repos) {
     for (const repo of repos) {
         const repoItem = document.createElement("li");
-        repoItem.classList. add("repo");
+        repoItem.classList.add("repo");
         repoItem.innerHTML = `<h3>${repo.name}</h3>`;
         repoList.append(repoItem);
     }
@@ -72,15 +72,31 @@ const getRepoInfo = async function (repoName) {
 
     //Fetch languages
     const fetchLanguages = await fetch(repoInfo.languages_url);
-    const languageData = await fetchLanguages.json();
+    const languageData = await fetchLanguages.json();   //languageData is an object
     console.log(languageData);
-    //Make a lis of languages
-    const languages = [];
-    for (const language of languageData) {
-        languages.push(language);
+    //Make a list of languages
+    const languages = [];  
+    for (const language in languageData) {   //for...in loop to specify which part of the object property to loop over
+        languages.push(language);    //.push()to add one or more elements to the end of an array
     }
 
-        
+    displayRepoInfo(repoInfo, languages);
+};
+
+//Create a function to display specific repo info
+const displayRepoInfo = function (repoInfo, languages) {
+  repoData.innerHTML = "";  //empty repo-data
+  repoData.classList.remove("hide");
+  allReposContainer.classList.add("hide");
+  const div = document.createElement("div");
+  div.innerHTML = `
+       <h3> Name: ${repoInfo.name}</h3>
+         <p>Description: ${repoInfo.description}</p>
+         <p>Default Branch: ${repoInfo.default_branch}</p>
+         <p>Languages: ${languages.join(", ")}</p>
+         <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>
+    `;
+repoData.append(div);
 };
 
 
